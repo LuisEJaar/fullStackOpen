@@ -23,6 +23,7 @@ const Button = (props) => {
 
 const App = () => {
   const [votes, setVotes] = useState({0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0})
+  const [top, setTop] = useState(0)
 
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -40,19 +41,30 @@ const App = () => {
     setSelected(RandNum(anecdotes.length))
   }
   
-  const setVote = (selected) => {
+  const incVote = (selected) => {
     const copy = {...votes}
     copy[selected] += 1
     setVotes(copy)
-  } 
+    findTop()
+  }
+
+  const findTop = () => {
+    const values = Object.values(votes)
+    console.log(values)
+    const max = values.indexOf(Math.max(...values))
+    setTop(max)
+  }
 
   return (
     <div className='d-flex flex-column container pt-4'>
+      <h1>Anecdote of the day:</h1>
       {anecdotes[selected]}
       <div>
         <Button text="next" clickHandler= {()=> GetRandom()} />
-        <Button text= {votes[selected]} clickHandler= {()=> setVote(selected)}/>
+        <Button text= {votes[selected]} clickHandler= {()=> incVote(selected)}/>
       </div>
+      <h2>Anecdote with most votes:</h2>
+        {anecdotes[top]}
     </div>
   )
 }
