@@ -20,14 +20,14 @@ const Statistic = props => {
 }
 
 const Button = (props) => (
-  <button onClick={props.handleClick}>
+  <button className="fs-3 btn btn-primary p-2 m-2" onClick={props.handleClick}>
     {props.text}
   </button>
 )
 
 const Statistics = ({clicks}) => {
   const all = clicks.good + clicks.neutral + clicks.bad
-  const avg = (clicks.good - clicks.bad) / all
+  const avg = ((clicks.good - clicks.bad) / all).toFixed(2)
   const positive = ((clicks.good/all) * 100).toFixed(2)
 
   if (clicks.good == 0 && clicks.neutral == 0 && clicks.bad == 0) {
@@ -36,22 +36,25 @@ const Statistics = ({clicks}) => {
     )
   }
   return(
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">Stat</th>
-          <th scope="col">Value</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><Statistic value={clicks.good} text="good"/></tr>
-        <tr><Statistic value={clicks.neutral} text="neutral" /></tr>
-        <tr><Statistic value={clicks.bad} text="bad"/></tr>
-        <tr><Statistic value={all} text="all"/></tr>
-        <tr><Statistic value={avg} text="average"/></tr>
-        <tr><Statistic value={positive} text="positive"/></tr>
-      </tbody>
-    </table>  
+    <div className="tableBox">
+      <table className="table table-dark table-striped table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Stat</th>
+            <th scope="col">Value</th>
+          </tr>
+        </thead>
+        <tbody className="table-group-divider">
+          <tr><Statistic value={clicks.good} text="Good"/></tr>
+          <tr><Statistic value={clicks.neutral} text="Neutral" /></tr>
+          <tr><Statistic value={clicks.bad} text="Bad"/></tr>
+          <tr><Statistic value={all} text="All"/></tr>
+          <tr><Statistic value={avg} text="Average"/></tr>
+          <tr><Statistic value={positive} text="Positive"/></tr>
+        </tbody>
+      </table> 
+    </div>
+     
   )
 }
 
@@ -71,17 +74,17 @@ export default function App() {
   }
   
   return (
-    <>
-    <h1>give feedback</h1>
-    <div>
-      <Button handleClick={() => setToGood()} text="good" />
-      <Button handleClick={() => setToNeutral()} text="neutral" />
-      <Button handleClick={() => setToBad()} text="bad" />
-    </div>
-    <h2>Statistics</h2>
-    <div>
-      <Statistics clicks={clicks}/>
-    </div>
-    </>
+    <section className="bg-info pt-5 d-flex flex-column justify-content-center align-items-center">
+      <h1 className="fs-1 pb-2">Give feedback</h1>
+      <div>
+        <Button handleClick={() => setToGood()} text="good" />
+        <Button handleClick={() => setToNeutral()} text="neutral" />
+        <Button handleClick={() => setToBad()} text="bad" />
+      </div>
+      <h2 className="fs-2 pb-2">Statistics:</h2>
+      <div>
+        <Statistics clicks={clicks}/>
+      </div>
+    </section>
   )
 }
