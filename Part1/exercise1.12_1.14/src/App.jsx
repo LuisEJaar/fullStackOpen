@@ -6,7 +6,24 @@ const RandNum = (length) => {
   )
 }
 
+const Button = (props) => {
+  if(props.text == "next") {
+    return(
+      <button className='btn btn-success m-2' onClick={props.clickHandler}>
+        {props.text}
+      </button>
+    )
+  }
+  return(
+    <button className='btn btn-success m-2' onClick={props.clickHandler}>
+      Votes ({props.text})
+    </button>
+  )
+}
+
 const App = () => {
+  const [votes, setVotes] = useState({0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0})
+
   const anecdotes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
@@ -19,24 +36,22 @@ const App = () => {
 
   const [selected, setSelected] = useState(0)
 
-  const Button = () => {
-    return(
-      <button className='btn btn-success mt-3' onClick={()=> clickHandler()}>
-      next anecdote
-      </button>
-    )
-  }
-
-  const clickHandler = () => {
+  const GetRandom = () => {
     setSelected(RandNum(anecdotes.length))
-    console.log(selected)
   }
+  
+  const setVote = (selected) => {
+    const copy = {...votes}
+    copy[selected] += 1
+    setVotes(copy)
+  } 
 
   return (
     <div className='d-flex flex-column container pt-4'>
       {anecdotes[selected]}
       <div>
-        <Button />
+        <Button text="next" clickHandler= {()=> GetRandom()} />
+        <Button text= {votes[selected]} clickHandler= {()=> setVote(selected)}/>
       </div>
     </div>
   )
