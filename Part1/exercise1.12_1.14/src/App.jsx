@@ -21,6 +21,18 @@ const Button = (props) => {
   )
 }
 
+const TopVote = ({votes, quote}) => {
+  if(Math.max(...Object.values(votes)) == 0){
+    return(
+      <p>No submissions yet</p>
+    )
+  } else {
+    return (
+      <p>{quote}</p>
+    )
+  }
+}
+
 const App = () => {
   const [votes, setVotes] = useState({0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0})
   const [top, setTop] = useState(0)
@@ -50,7 +62,6 @@ const App = () => {
 
   const findTop = () => {
     const values = Object.values(votes)
-    console.log(values)
     const max = values.indexOf(Math.max(...values))
     setTop(max)
   }
@@ -64,7 +75,7 @@ const App = () => {
         <Button text= {votes[selected]} clickHandler= {()=> incVote(selected)}/>
       </div>
       <h2>Anecdote with most votes:</h2>
-        {anecdotes[top]}
+        <TopVote quote={anecdotes[top]} votes={votes}/>
     </div>
   )
 }
