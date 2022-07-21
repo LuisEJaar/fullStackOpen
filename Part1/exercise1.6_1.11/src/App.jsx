@@ -1,8 +1,23 @@
 import React from "react"
 import {useState} from "react"
 
-const Display = props => <div>{props.text}: {props.value}</div>
-const DisplayPct = props => <div>{props.text}: {props.value}%</div>
+const Statistic = props => {
+  if(props.text == "positive"){
+    return(
+      <>
+        <td>{props.text}:</td>
+        <td>{props.value}%</td>
+      </>
+    )
+  } else {
+    return(
+      <>
+        <td>{props.text}:</td>
+        <td>{props.value}</td>
+      </>
+    )
+  }
+}
 
 const Button = (props) => (
   <button onClick={props.handleClick}>
@@ -10,16 +25,33 @@ const Button = (props) => (
   </button>
 )
 
-const Statistics = (props) => {
+const Statistics = ({clicks}) => {
+  const all = clicks.good + clicks.neutral + clicks.bad
+  const avg = (clicks.good - clicks.bad) / all
+  const positive = ((clicks.good/all) * 100).toFixed(2)
+
+  if (clicks.good == 0 && clicks.neutral == 0 && clicks.bad == 0) {
+    return (
+      <h2>No feedback given</h2>
+    )
+  }
   return(
-    <>
-      <Display value={props.clicks.good} text="good"/>
-      <Display value={props.clicks.neutral} text="neutral" />
-      <Display value={props.clicks.bad} text="bad"/>
-      <Display value={props.all} text="all"/>
-      <Display value={props.avg} text="average"/>
-      <DisplayPct value={props.positive} text="positve"/>
-    </>  
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Stat</th>
+          <th scope="col">Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><Statistic value={clicks.good} text="good"/></tr>
+        <tr><Statistic value={clicks.neutral} text="neutral" /></tr>
+        <tr><Statistic value={clicks.bad} text="bad"/></tr>
+        <tr><Statistic value={all} text="all"/></tr>
+        <tr><Statistic value={avg} text="average"/></tr>
+        <tr><Statistic value={positive} text="positive"/></tr>
+      </tbody>
+    </table>  
   )
 }
 
@@ -37,12 +69,7 @@ export default function App() {
   const setToBad= () => {
     setClicks({...clicks, bad: clicks.bad + 1})
   }
-
-  const all = clicks.good + clicks.neutral + clicks.bad
-  const avg = (clicks.good - clicks.bad) / all
-  const positive = (clicks.good/all) * 100
   
-
   return (
     <>
     <h1>give feedback</h1>
@@ -53,7 +80,7 @@ export default function App() {
     </div>
     <h2>Statistics</h2>
     <div>
-      <Statistics clicks={clicks} all={all} avg={avg} positive={positive} />
+      <Statistics clicks={clicks}/>
     </div>
     </>
   )
